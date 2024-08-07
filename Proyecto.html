@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        li:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+
+        .edit, .delete {
+            cursor: pointer;
+            color: #007bff;
+            margin-left: 10px;
+        }
+
+        .edit:hover, .delete:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Inventario</h1>
+        <form id="inventory-form">
+            <input type="text" id="item-name" placeholder="Nombre del artículo" required>
+            <input type="number" id="item-quantity" placeholder="Cantidad" required>
+            <button type="submit">Agregar</button>
+        </form>
+        <ul id="inventory-list"></ul>
+    </div>
+    <script>
+        document.getElementById('inventory-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const itemName = document.getElementById('item-name').value;
+            const itemQuantity = document.getElementById('item-quantity').value;
+            
+            addItem(itemName, itemQuantity);
+            document.getElementById('inventory-form').reset();
+        });
+
+        function addItem(name, quantity) {
+            const li = document.createElement('li');
+            li.innerHTML = `${name} - ${quantity} <span class="edit">Editar</span> <span class="delete">Eliminar</span>`;
+            
+            document.getElementById('inventory-list').appendChild(li);
+            
+            li.querySelector('.edit').addEventListener('click', function() {
+                editItem(li, name, quantity);
+            });
+            
+            li.querySelector('.delete').addEventListener('click', function() {
+                deleteItem(li);
+            });
+        }
+
+        function editItem(li, name, quantity) {
+            const newName = prompt('Nuevo nombre:', name);
+            const newQuantity = prompt('Nueva cantidad:', quantity);
+            
+            if (newName && newQuantity) {
+                li.innerHTML = `${newName} - ${newQuantity} <span class="edit">Editar</span> <span class="delete">Eliminar</span>`;
+                
+                li.querySelector('.edit').addEventListener('click', function() {
+                    editItem(li, newName, newQuantity);
+                });
+                
+                li.querySelector('.delete').addEventListener('click', function() {
+                    deleteItem(li);
+                });
+            }
+        }
+
+        function deleteItem(li) {
+            li.remove();
+        }
+    </script>
+</body>
+</html>
